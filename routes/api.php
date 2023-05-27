@@ -34,10 +34,12 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('products/one/{id}', 'getOne');
     Route::get('products/farmer/{id}', 'getFarmers');
     Route::post('products', 'create');
+    Route::delete('products/item/{id}', 'deleteItem');
 });
 
 Route::controller(CartController::class)->group(function () {
     Route::get('cart', 'getCart');
     Route::post('cart/item/{product_id}', 'addItem');
-    Route::delete('cart/item/{id}', 'removeItem');
+    Route::post('cart/item/{product_id}', 'addItem');
+    Route::delete('cart/item/product/{id}', 'removeItem');
 });

@@ -86,4 +86,23 @@ class ProductController extends Controller
             'success' => 1,
         ]);
     }
+
+    public function deleteItem($id)
+    {
+        Product::where('id', $id)->where('farmer_id', auth()->id())->delete();
+        $farmer = Farmer::where('user_id', auth()->id())->first();
+
+        $model = Product::where('farmer_id', $farmer->id)->get();
+
+        if (!$model) {
+            return response()->json([
+                'success' => 0,
+            ]);
+        }
+
+        return response()->json([
+            'success' => 1,
+            'data' => $model
+        ]);
+    }
 }

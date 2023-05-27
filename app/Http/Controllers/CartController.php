@@ -25,7 +25,7 @@ class CartController extends Controller
 
     public function getCart()
     {
-        $model = Cart::where('user_id', auth()->id())->with('items')->first();
+        $model = Cart::where('user_id', auth()->id())->with('items.product.farmer')->first();
 
         if (!$model) {
             $model = $this->createCart();
@@ -55,10 +55,16 @@ class CartController extends Controller
 
     public function removeItem($id)
     {
-        CartItem::where('id', $id)->delete();
+        $cart = CartItem::find($id);
+        $newId = $cart->cart_id;
+        $cart->delete();
+        $model = Cart::where('id', $newId)->with('items.product')->first();
 
         return response()->json([
             'success' => 1,
+            'data' => [
+                'newData' => $model
+            ]
         ]);
     }
 }
